@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     year: DataTypes.INTEGER
   }, {
     classMethods: {
-      book.associate = function(models) {
+      associate: function(models) {
     // associations can be defined here
       }
     },

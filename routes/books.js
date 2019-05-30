@@ -17,8 +17,13 @@ router.get('/', (req, res, next) => {
 });
 
 /* GET /books/new to show New Book form (new_book.html) */
-
-
+router.get('/', (req, res, next) => {
+  Books.create(req.body).then((book) => {
+    res.render("/books/new-book");
+  }).catch((error) => {
+      res.send(500, error);
+   });
+});
 
 /* POST /books/new to post New Book (new_book.html)*/
 router.post('/', (req, res, next) => {
