@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  head
+    a(href="../public/stylesheets/style.css")
+
+  body
+    h1 New Book
+    form(action="books/" + book.id + "?_method=PUT", method="post")
