@@ -6,7 +6,9 @@ block content
 
   body
     h1 New Book
-    form
+    include ./errors.pug
+    form(action="/books", method="post")
+
       p
         label(for="title") Title
         input(name="title", type="text", id="title")
@@ -22,4 +24,4 @@ block content
       p
         input(type="submit", value="Create New Book")
       p
-        a.button(href="/books/") Cancel    
+        a.button(href="/books/") Cancel

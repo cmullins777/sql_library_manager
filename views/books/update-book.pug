@@ -6,8 +6,9 @@ block content
 
   body
     h1 Update Book
-    form
 
+    include ./errors.pug
+    form(action="/books/" + book.id + "?_method=PUT", method="post")
       p
         label(for="title") Title
         input(name="title", type="text", id="title", value=book.title)

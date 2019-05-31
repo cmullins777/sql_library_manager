@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Book = require("../models").Book;
-
-/* GET / to REDIRECT home route to /books route */
-router.get('/', (req, res, next) => {
-  res.redirect("/books/");
-});
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 /* GET /books/ to show All Books (all_books.html) */
 router.get('/', (req, res, next) => {
@@ -17,7 +14,7 @@ router.get('/', (req, res, next) => {
 });
 
 /* GET /books/new to show New Book form (new_book.html) */
-router.get('/', (req, res, next) => {
+router.get('/books/new-book', (req, res, next) => {
   Books.create(req.body).then((book) => {
     res.render("/books/new-book");
   }).catch((error) => {
@@ -26,7 +23,7 @@ router.get('/', (req, res, next) => {
 });
 
 /* POST /books/new to post New Book (new_book.html)*/
-router.post('/', (req, res, next) => {
+router.post('/books/new-book', (req, res, next) => {
   Books.create(req.body).then((book) => {
     res.redirect("/books/" + book.id);
   }).catch((error) => {
@@ -45,7 +42,7 @@ router.post('/', (req, res, next) => {
 });
 
 /* GET /books/:id to show Update Book form (book_detail.html) */
-router.get("/:id", (req, res, next) => {
+router.get("/books/:id", (req, res, next) => {
   Book.findById(req.params.id).then( (book) => {
     if(book) {
       res.render("books/show", {book: book, title: book.title});
@@ -58,7 +55,7 @@ router.get("/:id", (req, res, next) => {
 });
 
 /* POST /books/:id to edit and Update Book (book_detail.html)*/
-router.post("/:id", (req, res, next) => {
+router.post("/books/:id", (req, res, next) => {
   Book.findById(req.params.id).then( (book) => {
     if(book) {
       return book.update(req.body);
@@ -73,7 +70,7 @@ router.post("/:id", (req, res, next) => {
 });
 
 /* POST /books/:id/delete to Delete Book (book_detail.html) */
-router.delete("/:id", (req, res, next) => {
+router.delete("/books/:id", (req, res, next) => {
   Book.findById(req.params.id).then( (book) => {
     if(book) {
       return book.destroy();

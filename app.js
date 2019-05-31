@@ -20,6 +20,10 @@ var books = require('./routes/books');
 app.use('/index', index);
 app.use('/books', books);
 
+app.use((req, res, next) => {
+  res.status(err.status || 500);
+  res.render('error');
+});
 
 app.use((req, res, next) => {
   const err = new Error('Not Found');
