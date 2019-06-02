@@ -5,22 +5,21 @@ let path = require('path');
 // get the client
 const mysql = require('mysql2');
 
-const Books = require("./models").Book;
-
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Routes
-var index = require('./routes/index');
+var routes = require('./routes/index');
 var books = require('./routes/books');
 
 //Access routes
-app.use('/index', index);
+app.use('/', routes);
 app.use('/books', books);
 
 app.use((req, res, next) => {
+  const err = new Error;
   res.status(err.status || 500);
   res.render('error');
 });
