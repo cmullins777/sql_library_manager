@@ -7,7 +7,7 @@ block content
   body
     h1 Update Book
 
-    include ./errors.pug
+    include ../error.pug
     form(action="/books/" + book.id + "?_method=PUT", method="post")
       p
         label(for="title") Title
@@ -28,13 +28,3 @@ block content
         a.button(href="/books") Cancel
       p
         input(type="submit", value="Delete Book")
-
-
-
-
-      each book in books
-        tr
-          td= book.title
-          td= book.author
-          td= book.genre
-          td= book.year
