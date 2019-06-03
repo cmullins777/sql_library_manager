@@ -1,13 +1,16 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 const sequelize = require("./models").sequelize;
 let path = require('path');
+
 // get the client
 const mysql = require('mysql2');
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
-
+app.locals.basedir = path.join(__dirname, 'views');
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Routes
@@ -18,10 +21,12 @@ var books = require('./routes/books');
 app.use('/', routes);
 app.use('/books', books);
 
-app.use((req, res, next) => {
-  const err = new Error;
+app.use((err, req, res, next) => {
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 
 app.use((req, res, next) => {

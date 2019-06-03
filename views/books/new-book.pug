@@ -1,8 +1,8 @@
 extends layout
 
-body
+block content
   h1 New Book
-  include ./errors.pug
+  include ../error.pug
   form(action="/books", method="post")
 
     p

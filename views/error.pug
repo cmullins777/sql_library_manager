@@ -1,8 +1,8 @@
-extends layout
+extends /books/layout.pug
 
 block content
-  h1 Server Error
-  p Sorry! We couldn't find the page you're looking for.
+  h1= error.message
+  h2= error.status
 
   p
     a.button(href='/books/') Home
