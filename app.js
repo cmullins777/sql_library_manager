@@ -21,14 +21,6 @@ var books = require('./routes/books');
 app.use('/', routes);
 app.use('/books', books);
 
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
-
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
