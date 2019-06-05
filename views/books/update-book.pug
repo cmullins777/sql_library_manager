@@ -1,13 +1,9 @@
 extends layout
 
 block content
-  head
-    a(href="../public/stylesheets/style.css")
 
-  body
     h1 Update Book
 
-    include ../error.pug
     form(action="/books/" + book.id + "?_method=PUT", method="post")
       p
         label(for="title") Title

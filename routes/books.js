@@ -38,7 +38,7 @@ router.post('/', (req, res, next) => {
 });
 
 /* GET /books/:id to show Update Book form (book_detail.html) */
-router.get('/:id/edit', (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   Book.findByPk(req.params.id).then( (book) => {
     if(book) {
       res.render("books/update-book", {book: book, title: book.title});
@@ -62,13 +62,27 @@ router.put("/:id", (req, res, next) => {
   }).then((book) => {
     res.redirect("/books/" + book.id);
   }).catch((err) => {
+    if(err.name === "SequelizeValidationError") {
+      const book = Book.build(req.body);
+      book.id = req.params.id;
+
+      res.render("books/edit", {
+        book: book,
+        title: "Edit Book",
+        errors: err.errors
+      });
+    } else {
+      throw err;
+    }
+  }).catch((err) => {
     res.send(500);
   });
 });
 
 /* POST /books/:id/delete to Delete Book (book_detail.html) */
 router.delete("/:id", (req, res, next) => {
-  Book.findByPk(req.params.id).then( (book) => {
+  Book.findByPk(req.params.id).then((book) => {
+    console.log(book);
     if(book) {
       return book.destroy();
     } else {
@@ -76,6 +90,8 @@ router.delete("/:id", (req, res, next) => {
     }
   }).then( () => {
     res.redirect("/books");
+  }).catch((error) => {
+    res.send(500);
   });
 });
 

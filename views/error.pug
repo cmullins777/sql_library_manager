@@ -1,7 +1,7 @@
 extends /books/layout.pug
 
 block content
-  h1 Server Error
+  h1= error.message
+  h2= error.status
 
-  p  Sorry! There was an unexpected error on the server.
     a.button(href='/books/') Home
