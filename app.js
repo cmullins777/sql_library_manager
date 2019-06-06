@@ -20,7 +20,6 @@ var books = require('./routes/books');
 //Access routes
 app.use('/', routes);
 app.use('/books', books);
-app.use('/index', routes);
 
 app.use((req, res, next) => {
   const err = new Error('Not Found');

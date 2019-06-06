@@ -59,7 +59,7 @@ router.post("/:id", (req, res, next) => {
       res.send(404);
     }
   }).then((book) => {
-    res.redirect("/books/" + book.id);
+    res.redirect("/books/");
   }).catch((error) => {
     if(error.name === "SequelizeValidationError") {
       const book = Book.build(req.body);
@@ -78,7 +78,7 @@ router.post("/:id", (req, res, next) => {
 });
 
 /* POST /books/:id/delete to Delete Book (book_detail.html) */
-router.delete("/books/:id/delete", (req, res, next) => {
+router.post("/:id/delete", (req, res, next) => {
   Book.findByPk(req.params.id).then((book) => {
     if(book) {
       return book.destroy();
