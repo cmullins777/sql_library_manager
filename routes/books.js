@@ -82,7 +82,7 @@ router.post("/:id/delete", (req, res, next) => {
     if(book) {
       return book.destroy();
     } else {
-      res.render("books/page-not-found");
+      res.send(404);
     }
   }).then( () => {
     res.redirect("/books");
