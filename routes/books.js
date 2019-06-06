@@ -27,8 +27,7 @@ router.post('/', (req, res, next) => {
       res.render("books/new-book", {
         book: Book.build(req.body),
         title: "New Book",
-        errors: error.errors
-      });
+        errors: error.errors})
     } else {
       throw error;
     }
@@ -43,16 +42,16 @@ router.get("/:id", (req, res, next) => {
     if(book) {
       res.render("books/update-book", {book: book, title: book.title});
     } else {
-      const err = new Error('Book Not Found');
-      res.render("error", { error: err});
+      const err = new Error('Not Found');
+        res.render("error", { error: err});
     }
-    }).catch((err) => {
-      res.send(500);
+  }).catch((error) => {
+    res.send(500, error);
   });
 });
 
-/* PUT /books/:id/ to Update Book (book_detail.html) */
-router.put("/:id", (req, res, next) => {
+/* Post /books/:id/ to Update Book (book_detail.html) */
+router.post("/:id", (req, res, next) => {
   Book.findByPk(req.params.id).then((book) => {
     if(book) {
       return book.update(req.body);
@@ -61,28 +60,26 @@ router.put("/:id", (req, res, next) => {
     }
   }).then((book) => {
     res.redirect("/books/" + book.id);
-  }).catch((err) => {
-    if(err.name === "SequelizeValidationError") {
+  }).catch((error) => {
+    if(error.name === "SequelizeValidationError") {
       const book = Book.build(req.body);
       book.id = req.params.id;
 
-      res.render("books/edit", {
+      res.render("books/update-book", {
         book: book,
-        title: "Edit Book",
-        errors: err.errors
-      });
-    } else {
-      throw err;
-    }
-  }).catch((err) => {
-    res.send(500);
+        title: "Update Book",
+        errors: error.errors})
+      } else {
+        throw err;
+      }
+  }).catch((error) => {
+    res.send(500, error);
   });
 });
 
 /* POST /books/:id/delete to Delete Book (book_detail.html) */
-router.delete("/:id", (req, res, next) => {
+router.delete("/books/:id/delete", (req, res, next) => {
   Book.findByPk(req.params.id).then((book) => {
-    console.log(book);
     if(book) {
       return book.destroy();
     } else {
@@ -91,7 +88,7 @@ router.delete("/:id", (req, res, next) => {
   }).then( () => {
     res.redirect("/books");
   }).catch((error) => {
-    res.send(500);
+    res.send(500, error);
   });
 });
 

@@ -2,6 +2,7 @@ extends layout
 
 block content
   h1 New Book
+  include ./new-book-error.pug
   form(action="/books", method="post")
 
     p
