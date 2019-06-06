@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
   Book.findAll({order: [["Title", "ASC"]]}).then(function(books) {
     res.render("books/index", {books:books, title: "List of Books"});
   }).catch((err) => {
-      res.send(500);
+      res.send(500, error);
    });
 });
 
@@ -22,17 +22,17 @@ router.get('/new-book', (req, res, next) => {
 router.post('/', (req, res, next) => {
   Book.create(req.body).then((book) => {
     res.redirect("/books/");
-  }).catch((err) => {
-    if(err.name === "SequelizeValidationError") {
+  }).catch((error) => {
+    if(error.name === "SequelizeValidationError") {
       res.render("books/new-book", {
         book: Book.build(req.body),
         title: "New Book",
-        errors: err.errors})
+        errors: error.errors})
     } else {
-      res.send(404);
+      throw error;
     }
   }).catch((err) => {
-      res.send(500);
+      res.send(500, error);
    });
 });
 
@@ -45,7 +45,7 @@ router.get("/:id", (req, res, next) => {
       res.send(404);
     }
   }).catch((err) => {
-    res.send(500);
+    res.send(500, error);
   });
 });
 
@@ -59,20 +59,20 @@ router.post("/:id", (req, res, next) => {
     }
   }).then((book) => {
     res.redirect("/books/");
-  }).catch((err) => {
-    if(err.name === "SequelizeValidationError") {
+  }).catch((error) => {
+    if(error.name === "SequelizeValidationError") {
       const book = Book.build(req.body);
       book.id = req.params.id;
 
       res.render("books/update-book", {
         book: book,
         title: "Update Book",
-        errors: err.errors})
+        errors: error.errors})
       } else {
         throw err;
       }
   }).catch((err) => {
-    res.send(500);
+    res.send(500, error);
   });
 });
 
@@ -82,12 +82,12 @@ router.post("/:id/delete", (req, res, next) => {
     if(book) {
       return book.destroy();
     } else {
-      res.send(404);
+      res.render("books/page-not-found");
     }
   }).then( () => {
     res.redirect("/books");
   }).catch((err) => {
-    res.send(500);
+    res.send(500, error);
   });
 });
 
