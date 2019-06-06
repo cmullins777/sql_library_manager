@@ -21,7 +21,7 @@ router.get('/new-book', (req, res, next) => {
 /* POST /books/new to post New Book (new_book.html)*/
 router.post('/', (req, res, next) => {
   Book.create(req.body).then((book) => {
-    res.redirect("/books/" + book.id);
+    res.redirect("/books/");
   }).catch((error) => {
     if(error.name === "SequelizeValidationError") {
       res.render("books/new-book", {
@@ -43,7 +43,7 @@ router.get("/:id", (req, res, next) => {
       res.render("books/update-book", {book: book, title: book.title});
     } else {
       const err = new Error('Not Found');
-        res.render("error", { error: err});
+        res.render("books/page-not-found", { error: err});
     }
   }).catch((error) => {
     res.send(500, error);
