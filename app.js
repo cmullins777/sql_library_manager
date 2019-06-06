@@ -22,16 +22,21 @@ app.use('/', routes);
 app.use('/books', books);
 
 app.use((req, res, next) => {
+  const err = new Error("Oh no!");
+  err.status = 500;
+  next(err);
+});
+
+app.use((req, res, next) => {
+  const err = new Error("Not Found!");
   err.status = 404;
   next(err);
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+  res.locals.error = err;
+  res.status(err.status);
+  res.render('error');
 });
 
 sequelize.sync()

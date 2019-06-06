@@ -8,8 +8,8 @@ const Op = Sequelize.Op;
 router.get('/', (req, res, next) => {
   Book.findAll({order: [["Title", "ASC"]]}).then(function(books) {
     res.render("books/index", {books:books, title: "List of Books"});
-  }).catch((error) => {
-      res.send(500, error);
+  }).catch((err) => {
+      res.send(500);
    });
 });
 
@@ -22,17 +22,17 @@ router.get('/new-book', (req, res, next) => {
 router.post('/', (req, res, next) => {
   Book.create(req.body).then((book) => {
     res.redirect("/books/");
-  }).catch((error) => {
-    if(error.name === "SequelizeValidationError") {
+  }).catch((err) => {
+    if(err.name === "SequelizeValidationError") {
       res.render("books/new-book", {
         book: Book.build(req.body),
         title: "New Book",
-        errors: error.errors})
+        errors: err.errors})
     } else {
-      throw error;
+      res.send(404);
     }
-  }).catch((error) => {
-      res.send(500, error);
+  }).catch((err) => {
+      res.send(500);
    });
 });
 
@@ -42,11 +42,10 @@ router.get("/:id", (req, res, next) => {
     if(book) {
       res.render("books/update-book", {book: book, title: book.title});
     } else {
-      const err = new Error('Not Found');
-        res.render("books/page-not-found", { error: err});
+      res.send(404);
     }
-  }).catch((error) => {
-    res.send(500, error);
+  }).catch((err) => {
+    res.send(500);
   });
 });
 
@@ -60,20 +59,20 @@ router.post("/:id", (req, res, next) => {
     }
   }).then((book) => {
     res.redirect("/books/");
-  }).catch((error) => {
-    if(error.name === "SequelizeValidationError") {
+  }).catch((err) => {
+    if(err.name === "SequelizeValidationError") {
       const book = Book.build(req.body);
       book.id = req.params.id;
 
       res.render("books/update-book", {
         book: book,
         title: "Update Book",
-        errors: error.errors})
+        errors: err.errors})
       } else {
         throw err;
       }
-  }).catch((error) => {
-    res.send(500, error);
+  }).catch((err) => {
+    res.send(500);
   });
 });
 
@@ -87,8 +86,8 @@ router.post("/:id/delete", (req, res, next) => {
     }
   }).then( () => {
     res.redirect("/books");
-  }).catch((error) => {
-    res.send(500, error);
+  }).catch((err) => {
+    res.send(500);
   });
 });
 
