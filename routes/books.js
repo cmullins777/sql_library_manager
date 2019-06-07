@@ -38,7 +38,7 @@ router.post('/', (req, res, next) => {
 
 /* GET /books/:id to show Update Book form (book_detail.html) */
 router.get("/:id", (req, res, next) => {
-  Book.findByPk(req.params.id).then( (book) => {
+  Book.findByPk(req.params.id).then((book) => {
     if(book) {
       res.render("books/update-book", {book: book, title: book.title});
     } else {

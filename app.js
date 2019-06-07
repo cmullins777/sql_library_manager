@@ -5,9 +5,10 @@ app.use(express.urlencoded({ extended: false }));
 const sequelize = require("./models").sequelize;
 let path = require('path');
 
-// get the client
+// Gets the client
 const mysql = require('mysql2');
 
+// Set up view engine, pug, express.static
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.locals.basedir = path.join(__dirname, 'views');
@@ -21,6 +22,7 @@ var books = require('./routes/books');
 app.use('/', routes);
 app.use('/books', books);
 
+// Handles 404 errors displaying page-not-found.pug
 app.use((req, res, next) => {
   let err = new Error;
   err.status = 404;
@@ -28,6 +30,7 @@ app.use((req, res, next) => {
   next(err);
 });
 
+// Handles server errors displaying error.pug
 app.use((err, req, res, next) => {
   res.render('error', {
     message: err.message,
@@ -35,6 +38,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Set server to start on localhost:3000
 sequelize.sync()
 .then(() => {
   app.listen(3000, () =>
