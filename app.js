@@ -21,16 +21,18 @@ var books = require('./routes/books');
 app.use('/', routes);
 app.use('/books', books);
 
+app.use((req, res, next) => {
+  let err = new Error;
+  err.status = 404;
+  res.render('books/page-not-found');
+  next(err);
+});
+
 app.use((err, req, res, next) => {
-  if (err.status === 404) {
-    res.render('books/page-not-found');
-  } else {
-    err.status = 500;
-    res.render('error', {
-      message: err.message,
-      err: err
+  res.render('error', {
+    message: err.message,
+    err: err
   });
- }
 });
 
 sequelize.sync()

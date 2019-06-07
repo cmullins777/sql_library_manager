@@ -42,7 +42,8 @@ router.get("/:id", (req, res, next) => {
     if(book) {
       res.render("books/update-book", {book: book, title: book.title});
     } else {
-      res.send(404);
+      let err = new Error;
+        res.render("books/page-not-found");
     }
   }).catch((err) => {
     res.send(500, error);
@@ -55,7 +56,7 @@ router.post("/:id", (req, res, next) => {
     if(book) {
       return book.update(req.body);
     } else {
-      res.send(404);
+      res.sendStatus(404);
     }
   }).then((book) => {
     res.redirect("/books/");
@@ -82,7 +83,7 @@ router.post("/:id/delete", (req, res, next) => {
     if(book) {
       return book.destroy();
     } else {
-      res.send(404);
+      res.sendStatus(404);
     }
   }).then( () => {
     res.redirect("/books");
